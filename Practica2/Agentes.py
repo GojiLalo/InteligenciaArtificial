@@ -13,21 +13,20 @@ class AgenteL:
         self.LD = []
 
     
-    def sensarArriba(self):
+    def sensarArriba(self, Obstaculos):
         y = self.PA[1]-1
         x = self.PA[0]-1
         if y == 0:
-            self.CONOCIDO[y][x] = self.matriz[y][x]
             return False
         else:
             self.CONOCIDO[y][x] = self.matriz[y][x]
             self.CONOCIDO[y-1][x] = self.matriz[y-1][x]
-            if self.CONOCIDO[y-1][x] == 0:
+            if self.CONOCIDO[y-1][x] in Obstaculos:
                 return False
             else:
                 return True
             
-    def sensarAbajo(self):
+    def sensarAbajo(self, Obstaculos):
         y = self.PA[1]-1
         x = self.PA[0]-1
         if y == len(self.CONOCIDO)-1:
@@ -36,12 +35,12 @@ class AgenteL:
         else:
             self.CONOCIDO[y][x] = self.matriz[y][x]
             self.CONOCIDO[y+1][x] = self.matriz[y+1][x]
-            if self.CONOCIDO[y+1][x] == 0:
+            if self.CONOCIDO[y+1][x] in Obstaculos:
                 return False
             else:
                 return True
             
-    def sensarDerecha(self):
+    def sensarDerecha(self, Obstaculos):
         y = self.PA[1]-1
         x = self.PA[0]-1
         if x == len(self.CONOCIDO[0])-1:
@@ -50,12 +49,12 @@ class AgenteL:
         else:
             self.CONOCIDO[y][x] = self.matriz[y][x]
             self.CONOCIDO[y][x+1] = self.matriz[y][x+1]
-            if self.CONOCIDO[y][x+1] == 0:
+            if self.CONOCIDO[y][x+1] in Obstaculos:
                 return False
             else:
                 return True
-            
-    def sensarIzquierda(self):
+                     
+    def sensarIzquierda(self, Obstaculos):
         y = self.PA[1]-1
         x = self.PA[0]-1
         if x == 0:
@@ -64,17 +63,20 @@ class AgenteL:
         else:
             self.CONOCIDO[y][x] = self.matriz[y][x]
             self.CONOCIDO[y][x-1] = self.matriz[y][x-1]
-            if self.CONOCIDO[y][x-1] == 0:
+            if self.CONOCIDO[y][x-1] in Obstaculos:
                 return False
             else:
                 return True
             
-    def sensar4Dir(self):
+    def sensar4Dir(self, Obstaculos):
         Des = []
-        Des.append(self.sensarArriba()) #ARRIBA
-        Des.append(self.sensarAbajo()) #ABAJO
-        Des.append(self.sensarIzquierda()) #IZQUIERDA
-        Des.append(self.sensarDerecha()) #DERECHA
+        y = self.PA[1]-1
+        x = self.PA[0]-1
+        if (x>=0 and x<=len(self.CONOCIDO[0])-1) and (y>=0 and y<=len(self.CONOCIDO)-1):
+            Des.append(self.sensarArriba(Obstaculos)) #ARRIBA
+            Des.append(self.sensarAbajo(Obstaculos)) #ABAJO
+            Des.append(self.sensarIzquierda(Obstaculos)) #IZQUIERDA
+            Des.append(self.sensarDerecha(Obstaculos)) #DERECHA
         return Des
     
     def moverArriba(self):
@@ -86,105 +88,39 @@ class AgenteL:
     def moverIzquierda(self):
         self.PA = [self.PA[0]-1, self.PA[1]]
     
-    def marcarMascara(self):
-        y = self.PA[1]-1
-        x = self.PA[0]-1
-        #Obtener laterales
-        if x > 0 and x < len(self.MASCARA[0])-1:
-            if self.MASCARA[y][x-1] == 9:
-                self.MASCARA[y][x-1] = self.CONOCIDO[y][x-1]
-            if self.MASCARA[y][x+1] == 9:
-                self.MASCARA[y][x+1] = self.CONOCIDO[y][x+1]
-        #Obtener horizontales
-        if y > 0 and y < len(self.MASCARA)-1:
-            if self.MASCARA[y-1][x] == 9:
-                self.MASCARA[y-1][x] = self.CONOCIDO[y-1][x]
-            if self.MASCARA[y+1][x] == 9:
-                self.MASCARA[y+1][x] = self.CONOCIDO[y+1][x]    
     
-    
-    def getLibres(self, valorLibs):
-        count = 0
+    def IAMov(self, Obstaculos, DIR):       
         y = self.PA[1]-1
         x = self.PA[0]-1
-        #Obtener laterales
-        if x >= 0 and x < len(self.MASCARA[0])-1:
-            if self.CONOCIDO[y][x-1] == valorLibs:
-                count = count +1
-            if self.CONOCIDO[y][x+1] == valorLibs:
-                count = count +1
-        if x == len(self.MASCARA[0])-1:
-            if self.CONOCIDO[y][x-1] == valorLibs:
-                count = count +1
-        #Obtener horizontales
-        if y >= 0 and y < len(self.MASCARA)-1:
-            if self.CONOCIDO[y-1][x] == valorLibs:
-                count = count +1
-            if self.CONOCIDO[y+1][x] == valorLibs:
-                count = count +1 
-        if y == len(self.MASCARA)-1:
-            if self.CONOCIDO[y-1][x] == valorLibs:
-                count = count +1
-        return count
-     
-    def Manual(self):
-        y = self.PA[1]-1
-        x = self.PA[0]-1
-        Des = self.sensar4Dir()
-        if x == self.PI[0]-1 and y == self.PI[1]-1:
-            if self.getLibres(1) > 1:
-                if (x,y) not in self.LD:
-                    self.LD.append((x, y))
-        else:
-            if (self.getLibres(1)-1) > 1:
-                if (x,y) not in self.LD:
-                    self.LD.append((x, y))
-        if pygame.key.get_pressed()[pygame.K_UP]:  
-            if Des[0]:
-                self.moverArriba()
-                self.MASCARA[y][x] = "V"
-        if pygame.key.get_pressed()[pygame.K_DOWN]:  
-            if Des[1]:
-                self.moverAbajo()
-                self.MASCARA[y][x] = "V"
-        if pygame.key.get_pressed()[pygame.K_LEFT]:  
-            if Des[2]:
-                self.moverIzquierda()
-                self.MASCARA[y][x] = "V"
-        if pygame.key.get_pressed()[pygame.K_RIGHT]:  
-            if Des[3]:
-                self.moverDerecha()
-                self.MASCARA[y][x] = "V" 
-        if (x,y) not in self.LV:
-            self.LV.append((x, y))
-        self.marcarMascara()
-
-
-        
-
-        
-
+        if DIR == "ARRIBA":
+            if (y>=0):
+                if (self.sensar4Dir(Obstaculos) == [True, False, False, False]) or (self.sensar4Dir(Obstaculos) == [True, True, False, False]):
+                    self.moverArriba()
+        if DIR == "ABAJO":  
+             if (y<=len(self.CONOCIDO)-1):
+                if (self.sensar4Dir(Obstaculos) == [False, True, False, False]) or (self.sensar4Dir(Obstaculos) == [True, True, False, False]):
+                    self.moverAbajo()
+        if DIR == "IZQUIERDA":
+            if (x>0 and x<=len(self.CONOCIDO[0])-1) and (y>=0 and y<=len(self.CONOCIDO)-1):
+                    if (self.sensar4Dir(Obstaculos) == [False, False, True, False]) or (self.sensar4Dir(Obstaculos) == [False, False, True, True]):
+                        self.moverIzquierda()
+        if DIR == "DERECHA":
+             if (x>=0 and x<len(self.CONOCIDO[0])-1) and (y>=0 and y<=len(self.CONOCIDO)-1):
+                if (self.sensar4Dir(Obstaculos) == [False, False, False, True]) or (self.sensar4Dir(Obstaculos) == [False, False, True, True]):
+                    self.moverDerecha()
 
     def AutomaticoProfundidad(self):
         y = self.PA[1]-1
         x = self.PA[0]-1
-        ARBOL = TR.Arbol(self.PI, self.sensar4Dir() , "I", None, None)
-        ESTADO = ""
-        ARBOL.crearNodosAncho(self.PI[0],self.PI[1])
-        if self.getLibres(1) >= 2:
-            ESTADO = "DECIDIR"
-        elif self.getLibres(1) == 1:
-            ESTADO = "MOVER"
-        if ESTADO == "MOVER":
-            self.moverArriba()
-        print(ESTADO)
-        print(ARBOL)
-        
+        Obstaculos = [0]
+        #ARBOL = TR.Arbol(self.PI, self.sensar4Dir(Obstaculos) , "I", None, None)
+        ESTADO = "INICIO"
+        self.IAMov(Obstaculos, "IZQUIERDA")
 
-
+            #print(self.sensar4Dir(Obstaculos))
         if (x,y) not in self.LV:
             self.LV.append((x, y))
-        self.marcarMascara()
+            #self.marcarMascara()
             
 
         
