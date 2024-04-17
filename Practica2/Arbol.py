@@ -43,11 +43,13 @@ class Arbol:
             self.crear_hijo( (x+1, y), self.ACC_D, "D", "IZQ", self)
         self.eliminarDirRep()
 
-    def __str__(self, NIVEL=0):
-        ret = "\t" * NIVEL + f"POS: {self.POS} {self.DIRECCION}\n"
+    def imprimir_arbol(self, nivel=0):
+        if nivel == 0:
+            print("Raíz:", self.POS)
+        else:
+            print(" " * nivel * 4 + "|___", self.POS, self.PADRE)
         for hijo in self.HIJOS:
-            ret += hijo.__str__(NIVEL + 1)
-        return ret
+            hijo.imprimir_arbol(nivel + 1)
     
     
 
