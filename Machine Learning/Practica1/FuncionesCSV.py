@@ -37,13 +37,13 @@ def obtenerSeparadores():
     
     return seleccion
 
-def leerCSV():
+def leerCSV(delimitador):
     matriz = []   
     ruta = filedialog.askopenfilename(initialdir=(os.getcwd()+"\\Bases"))
-    seleccion = obtenerSeparadores()
-     
+
     with open(ruta, 'r') as file:
-        reader = csv.reader(file, delimiter=seleccion)
+        reader = csv.reader(file, delimiter=delimitador)
         for row in reader:
-            matriz.append([cell for cell in row])
+            if row:  # Esto evita añadir filas vacías
+                matriz.append([cell for cell in row])
     return matriz

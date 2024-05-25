@@ -1,6 +1,9 @@
 import FuncionesCSV as CSV
 
-#CSV.obtenerArchivo()
+if __name__ == '__main__':
+        delimitador = CSV.obtenerSeparadores()
+        matriz = CSV.leerCSV(CSV.DELIMITADORES[delimitador])
+        n_atributos = len(matriz[0])
+        n_patrones = len(matriz)
+        print(f"La base de datos tiene {n_patrones} patrones con {n_atributos} atributos")
 
-datos = CSV.leerCSV()
-print(datos)
