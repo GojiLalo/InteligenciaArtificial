@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
 import funciones
+import knn
 
 DELIMITADORES = {
     "Coma": ",",
@@ -21,6 +22,7 @@ class App:
         self.n_patrones = 0
         self.ind_atributos = []
         self.ind_matriz = []
+        self.k = 1
         
         self.root.config(width=1200, height=500)
         self.root.title("Machine Learning Practica 1")
@@ -62,6 +64,22 @@ class App:
         # Crear un Text para mostrar la salida de la consola
         self.consola = tk.Text(self.root, width=80, height=10, bg="lightgrey")
         self.consola.place(x=50, y=200)
+        
+        #Caja de texto para definir K
+        self.etiqueta_k = tk.Label(self.root, text= "K:")
+        self.etiqueta_k.place(x=730 ,y=73)
+        self.caja_k = tk.Entry(self.root, width= 5)
+        self.caja_k.place(x=750, y=73)
+        
+        #Crear un cuadro de texto para ingresar datos y 2 botones para elegir el algoritmo de clasificacion
+        self.etiqueta_datos = tk.Label(self.root, text="Muestra:")
+        self.etiqueta_datos.place(x=550, y=73)
+        self.caja_datos = tk.Entry(self.root)
+        self.caja_datos.place(x=600, y=75)
+        self.k = self.caja_k.get()
+        boton_datos_knn = tk.Button(self.root, text="KNN con Muestra", command=self.knnmuestra)
+        boton_datos_knn.place(x=800, y= 73)
+        
     
     def seleccionar_archivo(self):
         self.ruta_archivo = filedialog.askopenfilename(
@@ -97,6 +115,15 @@ class App:
     def imprimir_consola(self, mensaje):
         self.consola.insert(tk.END, mensaje + "\n")
         self.consola.see(tk.END)  # Desplazar el texto automáticamente al final
+        
+    def knnmuestra(self):
+        k = self.caja_k.get()
+        k = int(k)
+        valores = self.caja_datos.get()
+        valores = list(map(float, valores.split(',')))
+        muestra = knn.KNN(valores, k, "euclidiana")
+        muestra.recuperacion()
+        self.imprimir_consola(f'La muestra ingresada es{muestra.clase}')
 
 if __name__ == '__main__':
     ventana = tk.Tk()
