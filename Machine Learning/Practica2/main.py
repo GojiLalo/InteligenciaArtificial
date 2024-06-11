@@ -79,6 +79,8 @@ class App:
         self.k = self.caja_k.get()
         boton_datos_knn = tk.Button(self.root, text="KNN con Muestra", command=self.knnmuestra)
         boton_datos_knn.place(x=800, y= 73)
+        boton_datos_knnM = tk.Button(self.root, text="KNN con txt", command=self.knnTxt)
+        boton_datos_knnM.place(x=910, y= 73)
         
     
     def seleccionar_archivo(self):
@@ -124,6 +126,11 @@ class App:
         muestra = knn.KNN(valores, k, "euclidiana")
         muestra.recuperacion()
         self.imprimir_consola(f'La muestra ingresada es{muestra.clase}')
+        
+    def knnTxt(self):
+        k = self.caja_k.get()
+        k = int(k)
+        knn.KNNvarias(k, "euclidiana")
 
 if __name__ == '__main__':
     ventana = tk.Tk()

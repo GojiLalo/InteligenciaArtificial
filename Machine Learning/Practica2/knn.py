@@ -22,20 +22,18 @@ class KNN:
         self.clase, frecuencia = contador_valores.most_common(1)[0] # Identificar el valor con la mayor frecuencia
         #print(f"El valor más repetido es {self.clase} con una frecuencia de {frecuencia}.")
     
-def KNNvarias():
+def KNNvarias(k, distancia):
     Entradas = fun.leerArchivo("Entradas.txt", ",")
     with open('Resultados.txt', 'w') as f:
         pass
     for i in Entradas:
         with open('Resultados.txt', 'a') as f:
-            Entrada = KNN(i, 5, "euclidiana")
+            Entrada = KNN(i, k, distancia)
             Entrada.recuperacion()
             valores = f"{', '.join(map(str, i))}"
-            print((f"{valores},{Entrada.clase}"))
             f.write((f"{valores},{Entrada.clase}\n"))
 
 m1 = [5.4, 3.9, 1.7, 0.4]
 m2 = [5.7, 2.8, 4.5, 1.3]
 m3 = [7.6, 3, 6.6, 2.1]
 
-KNNvarias()
