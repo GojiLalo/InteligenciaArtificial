@@ -15,20 +15,27 @@ class KNN:
             llave, valor = fun.calcularDistancia(i, self.entrada, self.modo)
             self.distancias[llave] = valor
         self.distancias = dict(sorted(self.distancias.items())) #Ordenar distancias
-        self.distancias = {k: self.distancias[k] for k in list(self.distancias)[:5]} #Regresar los K vecinos mas cercanos
+        self.distancias = {k: self.distancias[k] for k in list(self.distancias)[:self.n]} #Regresar los K vecinos mas cercanos
 
         valores = self.distancias.values() # Extraer los valores del diccionario
         contador_valores = Counter(valores) # Contar la frecuencia de cada valor        
         self.clase, frecuencia = contador_valores.most_common(1)[0] # Identificar el valor con la mayor frecuencia
         #print(f"El valor más repetido es {self.clase} con una frecuencia de {frecuencia}.")
     
+def KNNvarias():
+    Entradas = fun.leerArchivo("Entradas.txt", ",")
+    with open('Resultados.txt', 'w') as f:
+        pass
+    for i in Entradas:
+        with open('Resultados.txt', 'a') as f:
+            Entrada = KNN(i, 5, "euclidiana")
+            Entrada.recuperacion()
+            valores = f"{', '.join(map(str, i))}"
+            print((f"{valores},{Entrada.clase}"))
+            f.write((f"{valores},{Entrada.clase}\n"))
 
 m1 = [5.4, 3.9, 1.7, 0.4]
 m2 = [5.7, 2.8, 4.5, 1.3]
 m3 = [7.6, 3, 6.6, 2.1]
 
-prueba = KNN(m3, 1, "euclidiana")
-prueba.recuperacion()
-for clave, valor in prueba.distancias.items():
-    print(f'{clave}: {valor}')
-print(prueba.clase)
+KNNvarias()

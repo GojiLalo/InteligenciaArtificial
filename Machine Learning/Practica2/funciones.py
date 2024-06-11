@@ -64,6 +64,8 @@ def getSubmatriz(lista, intervalo, ind_subcon):
         if inicio <= i <= fin:
             en_rango.append(nuevo_elemento)
         else:
+            nuevo_elemento = [valor for valor in nuevo_elemento if not isinstance(valor, str)]
+            print(nuevo_elemento)
             fuera_de_rango.append(nuevo_elemento)
 
     # Escribir en_rango a un archivo de texto
