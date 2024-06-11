@@ -91,7 +91,7 @@ class App:
             indices = list(map(int, texto.split(',')))
             return indices
         except ValueError:
-            self.imprimir_consola("Error: Asegúrate de que los valores ingresados sean números separados por comas.")
+            self.imprimir_consola("")
             return []
 
     def imprimir_consola(self, mensaje):

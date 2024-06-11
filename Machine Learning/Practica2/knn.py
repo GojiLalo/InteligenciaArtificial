@@ -12,7 +12,7 @@ class KNN:
 
     def recuperacion(self):
         for i in self.base:
-            llave, valor = fun.calcularDistancia(i, self.entrada, "euclidiana")
+            llave, valor = fun.calcularDistancia(i, self.entrada, self.modo)
             self.distancias[llave] = valor
         self.distancias = dict(sorted(self.distancias.items())) #Ordenar distancias
         self.distancias = {k: self.distancias[k] for k in list(self.distancias)[:5]} #Regresar los K vecinos mas cercanos
@@ -27,7 +27,7 @@ m1 = [5.4, 3.9, 1.7, 0.4]
 m2 = [5.7, 2.8, 4.5, 1.3]
 m3 = [7.6, 3, 6.6, 2.1]
 
-prueba = KNN(m1, 1, "euclidiana")
+prueba = KNN(m3, 1, "euclidiana")
 prueba.recuperacion()
 for clave, valor in prueba.distancias.items():
     print(f'{clave}: {valor}')

@@ -54,10 +54,11 @@ def getSubconjunto(lista, indices):
     return [lista[i] for i in indices if i < len(lista)]
 
 def getSubmatriz(lista, intervalo, ind_subcon):
+    if not intervalo:
+        return lista
     inicio, fin = intervalo
     en_rango = []
     fuera_de_rango = []
-
     for i, elemento in enumerate(lista):
         nuevo_elemento = getSubconjunto(elemento, ind_subcon)
         if inicio <= i <= fin:
@@ -66,14 +67,18 @@ def getSubmatriz(lista, intervalo, ind_subcon):
             fuera_de_rango.append(nuevo_elemento)
 
     # Escribir en_rango a un archivo de texto
-    with open('en_rango.txt', 'w') as f:
+    with open('Base.txt', 'w') as f:
         for item in en_rango:
-            f.write(f"{item}\n")
+            f.write(f"{', '.join(map(str, item))}\n")
     
     # Escribir fuera_de_rango a un archivo de texto
-    with open('fuera_de_rango.txt', 'w') as f:
+    with open('Entradas.txt', 'w') as f:
         for item in fuera_de_rango:
-            f.write(f"{item}\n")
+            f.write(f"{', '.join(map(str, item))}\n")
+
+
+    return en_rango, fuera_de_rango
+
 
   
 def calcularDistancia(base, puntos2, tipo):
