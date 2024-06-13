@@ -33,6 +33,7 @@ def KNNvarias(k, distancia):
             valores = f"{', '.join(map(str, i))}"
             f.write((f"{valores},{Entrada.clase}\n"))
 
+
 m1 = [5.4, 3.9, 1.7, 0.4]
 m2 = [5.7, 2.8, 4.5, 1.3]
 m3 = [7.6, 3, 6.6, 2.1]

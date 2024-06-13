@@ -4,6 +4,7 @@ from tkinter import ttk
 from tkinter import filedialog
 import funciones
 import knn
+import minDistancia
 
 DELIMITADORES = {
     "Coma": ",",
@@ -11,6 +12,8 @@ DELIMITADORES = {
     "Punto y coma": ";",
     "Dos puntos": ":"
 }
+
+disList = ["manhattan", "euclidiana"]
 
 class App:
     def __init__(self, root):
@@ -26,12 +29,13 @@ class App:
         
         self.root.config(width=1200, height=500)
         self.root.title("Machine Learning Practica 1")
+        root.iconbitmap("mg.ico")
         
         # Crear una etiqueta de texto
         label = tk.Label(self.root, text="Delimitador:")
-        label.place(x=13, y=50)
+        label.place(x=3, y=50)
         
-        # Crear la lista desplegable
+        # Crear la lista desplegable para elegir separadores
         delList = list(DELIMITADORES.keys())
         self.lista = ttk.Combobox(self.root, values=delList, state="readonly")
         self.lista.place(x=85, y=50)
@@ -46,14 +50,14 @@ class App:
         self.etiqueta_archivo.place(x=10, y=10)
 
         # Crear una caja de texto para ingresar números (Sumatrices)
-        self.etiqueta_sub = tk.Label(self.root, text="Submatrices:")
-        self.etiqueta_sub.place(x=10, y=73)
+        self.etiqueta_sub = tk.Label(self.root, text="Subconjuntos:")
+        self.etiqueta_sub.place(x=3, y=73)
         self.caja_numeros = tk.Entry(self.root, width=50)
         self.caja_numeros.place(x=85, y=75)
 
         # Crear una caja de texto para ingresar números (Subdatos)
-        self.etiqueta_submat = tk.Label(self.root, text="Subdatos:")
-        self.etiqueta_submat.place(x=10, y=98)
+        self.etiqueta_submat = tk.Label(self.root, text="Datos:")
+        self.etiqueta_submat.place(x=3, y=98)
         self.caja_numerosmat = tk.Entry(self.root, width=50)
         self.caja_numerosmat.place(x=85, y=100)
 
@@ -81,7 +85,17 @@ class App:
         boton_datos_knn.place(x=800, y= 73)
         boton_datos_knnM = tk.Button(self.root, text="KNN con txt", command=self.knnTxt)
         boton_datos_knnM.place(x=910, y= 73)
+        boton_datos_minima = tk.Button(self.root, text="Minima distancia con Muestra", command=self.minDistanciaMuestra)
+        boton_datos_minima.place(x=800, y= 103)
+        boton_datos_minimaM = tk.Button(self.root, text="Minima distancia con txt", command=self.minDistanciaTxt)
+        boton_datos_minimaM.place(x=978, y= 103)
         
+        # Crear la lista desplegable para tipo de distancia
+        labelDis = tk.Label(self.root, text="Distancia:")
+        labelDis.place(x=570, y=103)
+        self.listaDis = ttk.Combobox(self.root, values=disList, state="readonly")
+        self.listaDis.place(x=630, y=103)
+        self.listaDis.set("manhattan")
     
     def seleccionar_archivo(self):
         self.ruta_archivo = filedialog.askopenfilename(
@@ -131,6 +145,18 @@ class App:
         k = self.caja_k.get()
         k = int(k)
         knn.KNNvarias(k, "euclidiana")
+        self.imprimir_consola(f'Muestras clasificadas en Resultados.txt')
+        
+    def minDistanciaMuestra(self):
+        valores = self.caja_datos.get()
+        valores = list(map(float, valores.split(',')))
+        muestra = minDistancia.minimaDistancia(valores, self.listaDis.get())
+        muestra.clasificar()
+        self.imprimir_consola(f'La muestra ingresada es{muestra.clase}')
+        
+    def minDistanciaTxt(self):
+        minDistancia.dMinimaVarias(self.listaDis.get())
+        self.imprimir_consola(f'Muestras clasificadas en Resultados.txt')
 
 if __name__ == '__main__':
     ventana = tk.Tk()

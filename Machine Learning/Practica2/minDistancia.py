@@ -38,7 +38,7 @@ class minimaDistancia:
     def clasificar(self):
         self.getPromedios()
         distancias = {}
-        for clave, valor in prueba.Promedios.items():
+        for clave, valor in self.Promedios.items():
             distancia, clase = fun.calcularDistancia(valor, self.entrada, "euclidiana")
             distancias.update({clave:distancia})
             
@@ -57,15 +57,3 @@ def dMinimaVarias(distancia):
             valores = f"{', '.join(map(str, i))}"
             f.write((f"{valores},{Entrada.clase}\n"))
 
-#Ejemplo de uso de una sola muestra
-m1 = [5.4, 3.9, 1.7, 0.4]
-m2 = [5.7, 2.8, 4.5, 1.3]
-m3 = [7.6, 3, 6.6, 2.1]
-prueba = minimaDistancia(m2, "euclidiana")
-prueba.clasificar()
-print(prueba.clase)
-#Fin ejemplo una sola muestra
-
-#Ejemplo de varias muestras
-dMinimaVarias("euclidiana")
-#Fin ejemplo varias muestras
